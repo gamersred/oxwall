@@ -134,16 +134,7 @@ class BASE_CTRL_EmailVerify extends OW_ActionController
     {
         $this->setMasterPage();
 
-        $userId = OW::getUser()->getId();
-
-        if ( OW::getUser()->isAuthenticated() || $userId === null )
-        {
-            throw new Redirect403Exception();
-        }
-
-        $user = BOL_UserService::getInstance()->findUserById($userId);
-
-        if ( (int) $user->emailVerify === 1 )
+        if ( OW::getUser()->isAuthenticated())
         {
             throw new Redirect403Exception();
         }
