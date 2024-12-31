@@ -243,6 +243,7 @@ return false;
             $emailVerifiedData->email = trim($email);
             $emailVerifiedData->hash = $hash;
             $emailVerifiedData->createStamp = time();
+	    $emailVerifiedData->lastSentStamp = time();
             $emailVerifiedData->type = $type;
 
             BOL_EmailVerifyService::getInstance()->batchReplace(array($emailVerifiedData));
