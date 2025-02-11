@@ -118,6 +118,7 @@ class BASE_CTRL_EmailVerify extends OW_ActionController
 
     public function verify( $params )
     {
+        
 if ( OW::getUser()->isAuthenticated() )
 {
 $user = BOL_UserService::getInstance()->findUserById(OW::getUser()->getId());
