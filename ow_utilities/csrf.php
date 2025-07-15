@@ -52,12 +52,43 @@ class UTIL_Csrf
      * @param string $token
      * @return bool
      */
-    public static function isTokenValid( $token )
-    {
-        $tokenList = self::getTokenList();
+    public static function isTokenValid($token)
+{
+    $tokenList = self::getTokenList();
 
-        return !empty($tokenList[$token]);
+    if (!isset($tokenList[$token])) {
+        return false;
     }
+
+    $tokenData = $tokenList[$token];
+
+    // delete expired (10 minuted old)
+    if (isset($tokenData['createTime']) && $tokenData['createTime'] < strtotime('-10 minutes')) {
+        unset($tokenList[$token]);
+        self::saveTokenList($tokenList);
+        return false;
+    }
+
+    // set validation limit (3 seconds between uses)
+    if (isset($tokenData['lastValidateTime']) && $tokenData['lastValidateTime'] > strtotime('-3 seconds')) {
+        return false;
+    }
+
+    // delete by validation count
+    if (isset($tokenData['isValidCount']) && $tokenData['isValidCount'] >= 10) {
+        unset($tokenList[$token]);
+        self::saveTokenList($tokenList);
+        return false;
+    }
+
+    // update values
+    $tokenData['lastValidateTime'] = time();
+    $tokenData['isValidCount'] = isset($tokenData['isValidCount']) ? $tokenData['isValidCount'] + 1 : 1;
+    $tokenList[$token] = $tokenData;
+    self::saveTokenList($tokenList);
+
+    return true;
+}
     /* -------------------------------------------------------------------------------------------------------------- */
 
     private static function getTokenList()
