@@ -40,7 +40,7 @@ class UTIL_Csrf
     {
         $tokenList = self::getTokenList();
         $token = base64_encode(time() . UTIL_String::getRandomString(32));
-        $tokenList[$token] = time();
+        $tokenList[$token] = ['createTime'=>time(),'lastValidateTime'=>0,'isValidCount'=>0];
         self::saveTokenList($tokenList);
 
         return $token;
