@@ -69,10 +69,7 @@ class UTIL_Csrf
         return false;
     }
 
-    // set validation limit (3 seconds between uses)
-    if (isset($tokenData['lastValidateTime']) && $tokenData['lastValidateTime'] > strtotime('-3 seconds')) {
-        return false;
-    }
+// do not set validation limit. Exp: 3 seconds as in many cases token gets validated by multiple classes it take milliseconds which will make it fail
 
     // delete by validation count
     if (isset($tokenData['isValidCount']) && $tokenData['isValidCount'] >= 10) {
