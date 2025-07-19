@@ -71,8 +71,8 @@ class UTIL_Csrf
 
 // do not set validation limit. Exp: 3 seconds as in many cases token gets validated by multiple classes it take milliseconds which will make it fail
 
-    // delete by validation count
-    if (isset($tokenData['isValidCount']) && $tokenData['isValidCount'] >= 10) {
+    // delete by validation count. Keep count_limit relativelly high but not too high. =>50 and =<100
+    if (isset($tokenData['isValidCount']) && $tokenData['isValidCount'] >= 50) {
         unset($tokenList[$token]);
         self::saveTokenList($tokenList);
         return false;
