@@ -247,15 +247,11 @@ class OW_RequestHandler
         OW::getEventManager()->trigger(new OW_Event("core.performance_test",
             array("key" => "controller_call.start", "handlerAttrs" => $this->handlerAttributes)));
         
-try {
     if (method_exists($controller, $actionName)) {
         $controller->$actionName($args['params']);
     } else {
-        throw new Exception("Action not found");
+        throw new Redirect404Exception();
     }
-} catch (Exception $e) {
-throw new Redirect404Exception();
-}
         
         OW::getEventManager()->trigger(new OW_Event("core.performance_test",
             array("key" => "controller_call.end", "handlerAttrs" => $this->handlerAttributes)));
